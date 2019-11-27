@@ -1,5 +1,8 @@
 <IfModule mod_rewrite.c>
-   RewriteEngine On
-   RewriteCond %{REQUEST_URI}  !(\.css|\.js)$
-   RewriteRule (.*)  index.php [QSA]
+  RewriteEngine On
+
+  RewriteCond %{REQUEST_URI} ^.*public/(.*)
+  RewriteRule ^(.*)$ public/%1 [END]
+
+  RewriteRule (.*)  index.php [QSA]
 </IfModule>

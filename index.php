@@ -1,33 +1,34 @@
 <?php
-$url = $_SERVER['REQUEST_URI'];
-$path =parse_url($url)['path'];
-$method = $_SERVER['REQUEST_METHOD'];
-var_dump($path);
 
 $routes = [
     'GET' =>[
-        '/shoutit/' =>'homeHandler'
+        '/' =>'homeHandler'
     ],
     'POST' =>[
-        '/shoutit/create-shoutit' => 'createShoutit'
+        '/create-shout' => 'createShoutit'
     ]
 
 ];
 
+$url = $_SERVER['REQUEST_URI'];
+$path =parse_url($url)['path'];
+$method = $_SERVER['REQUEST_METHOD'];
+
+
 $handler = $routes[$method][$path]??'';
-var_dump($handler);
 if($handler && is_callable($handler)){
     $conn = new mysqli('localhost', 'root', '', 'shoutit', 3306);
     $conn->set_charset('utf8');
     $handler($conn, $_GET,$_POST);
 
-}else{
+}else
+{
     echo '404';
 }
 
 function homeHandler(mysqli $conn,$query,$body)
 {
-    $result = $conn -> query("SELECT * FROM shouts");
+    $result = $conn -> query("SELECT * FROM shouts ORDER BY id DESC");
     $shouts = [];
     while ($data = $result->fetch_assoc()) {
         $shouts[] = $data;
@@ -37,5 +38,27 @@ function homeHandler(mysqli $conn,$query,$body)
 
 function createShoutit(mysqli $conn,$query,$body)
 {
-    var_dump('csaa');
+    $user = $body['user'];
+    $message = $body['message'];
+    date_default_timezone_set('Europe/Budapest');
+    $time = date('H:i:s a',time());
+
+    if(!isset($user) || $user == '' || !isset($message) || $message == ''){
+        $error = "Please fill in your name and a message";
+        header("Location: /?error=".urlencode($error));
+        return;
+    }
+
+    $queryString = "INSERT INTO shouts (user,message, time) VALUES(?,?,?)";
+
+    $statement = $conn -> prepare($queryString);
+    $statement -> bind_param('sss',$user,$message,$time);
+    $isSuccess = $statement -> execute();
+
+    if(!$isSuccess){
+        header("Location: /?error=".urlencode($error));
+        return;
+    }
+
+    header("Location: /");
 }

@@ -3,8 +3,11 @@
 
 <head>
     <meta charset="utf-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>SHOUT IT!</title>
-    <link href="css/style.css" rel="stylesheet">
+    <link href="public/style.css" rel="stylesheet">
 </head>
 <body>
      <div id="container">
@@ -19,14 +22,13 @@
         </ul>
      </div>
      <div id="input">
-     <?php if(isset($_GET['error'])) :?>
-     <div class="error"><?= $_GET['error']?></div>
+     <?php if(isset($query['error'])) :?>
+     <div class="error"><?= $query['error']?></div>
      <?php endif; ?>
-     <form action="/shoutit/create-shoutit" method="POST">
-    <input type="text" name="user" placeholder="Enter Your Name">
-    <input type="text" name="message" placeholder="Enter a Message">
-    <br>
-    <input class="shout-btn" type="submit" value="Shout It Out">
+     <form action="/create-shout" method="POST">
+        <input type="text" name="user" placeholder="Enter Your Name">
+        <input type="text" name="message" placeholder="Enter a Message">
+        <input type="submit" value="Shout It Out" class="shout-btn" >
     </form>
      </div>
     </div>
