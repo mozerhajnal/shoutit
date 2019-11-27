@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>SHOUT IT!</title>
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+     <div id="container">
+     <header>
+     <h1>SHOUT IT! Shoutbox</h1>
+     </header>
+    <div id="shouts">
+        <ul>
+        <?php foreach ($shouts as $shout) : ?>
+            <li class="shout"><span><?= $shout['time'] ?> - </span><strong><?= $shout['user'] ?>:</strong> <?= $shout['message'] ?></li>
+        <?php endforeach; ?>
+        </ul>
+     </div>
+     <div id="input">
+     <?php if(isset($_GET['error'])) :?>
+     <div class="error"><?= $_GET['error']?></div>
+     <?php endif; ?>
+     <form action="/shoutit/create-shoutit" method="POST">
+    <input type="text" name="user" placeholder="Enter Your Name">
+    <input type="text" name="message" placeholder="Enter a Message">
+    <br>
+    <input class="shout-btn" type="submit" value="Shout It Out">
+    </form>
+     </div>
+    </div>
+</body>
+</html>
